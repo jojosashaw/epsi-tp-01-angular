@@ -12,18 +12,25 @@ import { BookService } from '../../services/book.service';
 })
 export class AddBookComponent implements OnInit {
   bookForm!: FormGroup;
-  
+
   constructor(
     private fb: FormBuilder,
     private bookService: BookService,
     private router: Router
   ) {}
-  
+
   ngOnInit(): void {
-    // TODO 6 : Créer un formulaire avec les champs suivants : title, author, description, category
-    // TODO 7 : Ajouter les validations nécessaires
+    // Création du formulaire avec les champs nécessaires et validation
+    this.bookForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      author: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      category: ['', [Validators.required]],
+      rating: [null, [Validators.required, Validators.min(1), Validators.max(5)]],
+      isFavorite: [false]
+    });
   }
-  
+
   onSubmit(): void {
     if (this.bookForm.valid) {
       this.bookService.addBook(this.bookForm.value).subscribe({
